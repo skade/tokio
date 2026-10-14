@@ -118,6 +118,9 @@ impl Driver {
                 Ok(0) => panic!("EOF on self-pipe"),
                 Ok(_) => continue, // Keep reading
                 Err(e) if e.kind() == std_io::ErrorKind::WouldBlock => break,
+                // Without SA_RESTART (e.g. on QNX) a signal arriving during the
+                // read interrupts it; just retry.
+                Err(e) if e.kind() == std_io::ErrorKind::Interrupted => continue,
                 Err(e) => panic!("Bad read on self-pipe: {e}"),
             }
         }

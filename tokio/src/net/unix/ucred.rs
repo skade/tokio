@@ -76,7 +76,7 @@ pub(crate) use self::impl_aix::get_peer_cred;
 ))]
 pub(crate) use self::impl_noproc::get_peer_cred;
 
-#[cfg(target_os = "nto")]
+#[cfg(any(target_os = "nto", target_os = "qnx"))]
 pub(crate) use self::impl_nto::get_peer_cred;
 
 #[cfg(any(
@@ -422,7 +422,7 @@ pub(crate) mod impl_noproc {
     }
 }
 
-#[cfg(target_os = "nto")]
+#[cfg(any(target_os = "nto", target_os = "qnx"))]
 pub(crate) mod impl_nto {
     use crate::net::unix::{self, UnixStream};
 
