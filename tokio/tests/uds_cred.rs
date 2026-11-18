@@ -37,8 +37,9 @@ fn assert_peer_cred(a: &UnixStream, b: &UnixStream) {
     let cred_b = b.peer_cred().unwrap();
     assert_eq!(cred_a, cred_b);
 
-    let uid = unsafe { geteuid() };
-    let gid = unsafe { getegid() };
+    // libc uses signed IDs on QNX; tokio exposes its own `uid_t`/`gid_t`.
+    let uid = unsafe { geteuid() } as tokio::net::unix::uid_t;
+    let gid = unsafe { getegid() } as tokio::net::unix::gid_t;
 
     assert_eq!(cred_a.uid(), uid);
     assert_eq!(cred_a.gid(), gid);

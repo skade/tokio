@@ -131,7 +131,8 @@ libc = { version = "0.2.168", optional = true }
 [target.'cfg(unix)'.dev-dependencies]
 libc = { version = "0.2.168" }
 
-[target.'cfg(all(unix, not(target_os = "emscripten")))'.dev-dependencies]
+# nix does not support QNX: tests using it are skipped there.
+[target.'cfg(all(unix, not(target_os = "emscripten"), not(target_os = "qnx")))'.dev-dependencies]
 nix = { version = "0.32.0", default-features = false, features = ["aio", "fs", "socket"] }
 
 [target.'cfg(windows)'.dependencies.windows-sys]
